@@ -1,0 +1,90 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="nav-bar">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+        padding: 10px;
+      }
+
+      simple-menu, simple-menubar {
+        display: inline-block;
+        /* width: 100%; */
+        padding: 10px;
+      }
+
+      simple-menu a {
+        display: block;
+      }
+
+      simple-menubar a,
+      simple-menu a {
+        padding: 15px 20px;
+        color: var(--primary-text-color);
+        text-decoration: none;
+      }
+      simple-menubar a.iron-selected,
+      simple-menu a.iron-selected {
+        color: white;
+      }
+      simple-menu a[disabled],
+      simple-menubar a[disabled] {
+        color: var(--google-grey-300);
+      }
+
+        .row {
+        height: 40px;
+      }
+
+      .header-nav {
+        font-weight: bold;
+        text-align: center;
+        border-bottom: 3px solid #fff;
+        border-top: 3px solid #fff;
+        display: inline-block;
+        margin: 90px;
+        /* padding: 16px; */
+        @apply --layout-flex;
+        font-size: 22px;
+      }
+
+    </style>
+
+    <div class="header-nav">
+      <iron-selector selected="[[page]]" attr-for-selected="name" role="navigation" fallback-selection="default">
+            <div>
+              <simple-menubar>
+                <a role="menuitem" name="view1" href="[[rootPath]]view1">Home</a>
+                <a role="menuitem" name="view2" href="[[rootPath]]view2">About Us</a>
+                <a role="menuitem" name="view3" href="[[rootPath]]view3">Pricing</a>
+                <a role="menuitem" name="view4" href="[[rootPath]]view4">Adults</a>
+                <a role="menuitem" name="view5" href="[[rootPath]]view5">Teens</a>
+                <a role="menuitem" name="view6" href="[[rootPath]]view6">Contact Us</a>
+              </simple-menubar>
+          </div>
+      </iron-selector>
+    </div>
+
+  </template>
+
+  <script>
+    class NavBar extends Polymer.Element {
+      static get is() { return 'nav-bar'; }
+    }
+
+    window.customElements.define(NavBar.is, NavBar);
+  </script>
+</dom-module>

@@ -1,0 +1,294 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/app-route/app-location.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<!-- iron elements -->
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<!-- paper elements -->
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+
+<!-- <link rel="import" href="my-icons.html"> -->
+<!-- import CSS mixins polyfill -->
+<link rel="import" href="/bower_components/shadycss/apply-shim.html">
+<!-- import shared styles sheet-->
+<link rel="import" href="shared-styles.html">
+
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<link rel="lazy-import" href="my-view1.html">
+<link rel="lazy-import" href="my-view2.html">
+<link rel="lazy-import" href="my-view3.html">
+<link rel="lazy-import" href="my-view404.html">
+<link rel="import" href="nav-bar.html">
+
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-if.html">
+
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<style is="custom-style" include="iron-positioning"></style>
+
+<dom-module id="my-app">
+  <template>
+    <style include="shared-styles">
+      :host {
+        /* --app-primary-color: #4285f4; */
+        --app-primary-color: #007392;
+        --app-secondary-color: white;
+
+        --primary-text-color: white;
+        --secondary-text-color: #72eafb;
+        --tertiary-text-color: #0c6f82;
+          display: block;
+          padding: 10px;
+      }
+
+
+      app-drawer-layout {
+        background-color: var(--app-primary-color);
+      }
+
+      app-drawer, app-drawer paper-listbox {
+        --app-drawer-content-container: {
+          background-color: var(--app-primary-color);
+        };
+
+        background-color: var(--app-primary-color);
+      }
+
+      .logo {
+        background-image: url(../images/images/logo-tmp.png);
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+
+      #drawer {
+        background-color: var(--app-primary-color);
+      }
+
+      .drawer-list {
+        margin: 0 20px;
+      }
+
+
+      [hidden] {
+        display: none !important;
+      }
+
+      #tabs-bar {
+        display: inline-block;
+        font-weight: bold;
+        text-align: center;
+        border-bottom: 3px solid #fff;
+        border-top: 3px solid #fff;
+        margin: 45px 112px;
+        padding: 5px;
+        @apply --layout-vertical;
+        @apply --layout-flex;
+        height: 40px;
+      }
+
+      #tabs-bar paper-tabs {
+        /* margin: 15px; */
+      }
+
+      #tabs-bar a {
+        text-decoration: none;
+        font-size: 22px;
+        padding: 0 16px;
+        color: var(--primary-text-color);
+        line-height: 40px;
+        text-transform: uppercase;
+      }
+
+      #tabs-bar a: {
+        color: var(--app-primary-color);
+        font-weight: bold;
+      }
+
+      #tabs-bar a:hover {
+        color: var(--secondary-text-color);
+        font-weight: bold;
+      }
+
+      #tabs-bar a[disabled] {
+        color: var(--google-grey-300);
+      }
+
+      /* app-drawer-layout:not([narrow]) [drawer-toggle] { display: none; }) */
+
+    </style>
+
+    <app-location
+        route="{{route}}">
+    </app-location>
+
+    <app-route
+        route="{{route}}"
+        pattern="[[rootPath]]:page"
+        data="{{routeData}}"
+        tail="{{subroute}}">
+    </app-route>
+
+    <iron-media-query query="min-width:800px" query-matches="{{wideLayout}}"></iron-media-query>
+
+    <app-drawer-layout fullbleed force-narrow={{wideLayout}}>
+      <!-- Drawer content -->
+      <app-drawer id="drawer" slot="drawer" swipe-open=true>
+        <!-- <template is="dom-if" if="[[!wideLayout]]"> -->
+          <app-toolbar>
+            <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+          </app-toolbar>
+          <paper-listbox selected="[[page]]" attr-for-selected="name">
+            <template is="dom-repeat" items="{{items}}">
+              <paper-item name$="{{item}}">
+                <a href="[[rootPath]]">{{item}}</a>
+              </paper-item>
+            </template>
+          </paper-listbox>
+        <!-- </template> -->
+        <!-- Make the contents of the drawer scrollable by wrapping in div with height and overflow-->
+        <!-- <div style="height: 100%; overflow: auto;"> -->
+          <!-- <paper-menu selected="0">
+            <paper-item><a href="[[rootPath]]view1">Home</a></paper-item>
+            <paper-item><a href="[[rootPath]]view1">About Us</a></paper-item>
+            <paper-item><a href="[[rootPath]]view1">Pricing</a></paper-item>
+            <paper-item><a href="[[rootPath]]view1">Adults</a></paper-item>
+            <paper-item><a href="[[rootPath]]view1">Contact Us</a></paper-item>
+          </paper-menu> -->
+        <!-- </div> -->
+      </app-drawer>
+
+      <!-- Main content -->
+      <app-header-layout has-scrolling-region>
+
+        <app-header slot="header" class="main-header" condenses effects="waterfall">
+
+          <app-toolbar class="logo"></app-toolbar>
+
+          <app-toolbar id="tabs-bar" hidden$="{{!wideLayout}}">
+            <paper-tabs selected="[[page]]" attr-for-selected="name">
+              <paper-tab><a href="[[rootPath]]home">Home</a></paper-tab>
+              <paper-tab><a href="[[rootPath]]about">About Us</a></paper-tab>
+              <paper-tab><a href="[[rootPath]]pricing">Pricing</a></paper-tab>
+              <paper-tab><a href="[[rootPath]]contact">Contact Us</a></paper-tab>
+            </paper-tabs>
+          </app-toolbar>
+
+        </app-header>
+
+        <iron-pages
+            selected="[[page]]"
+            attr-for-selected="name"
+            fallback-selection="view404"
+            role="main">
+            <my-view1 name="home"></my-view1>
+            <my-view2 name="about"></my-view2>
+            <my-view3 name="pricing"></my-view3>
+            <my-view4 name="contact"></my-view4>
+            <my-view404 name="view404"></my-view404>
+        </iron-pages>
+
+      </app-header-layout>
+    </app-drawer-layout>
+
+  </template>
+
+  <script>
+    class MyApp extends Polymer.Element {
+      static get is() { return 'my-app'; }
+
+      static get properties() {
+        return {
+          page: {
+            type: String,
+            reflectToAttribute: true,
+            observer: '_pageChanged'
+          },
+
+         wideLayout: {
+           type: Boolean,
+           value: false,
+           observer: 'onLayoutChange'
+         },
+
+         items: {
+           type: Array,
+           value: function() {
+             return ['Home', 'About', 'Pricing', 'Contact'];
+           }
+         },
+
+          routeData: Object,
+          subroute: String,
+          // This shouldn't be neccessary, but the Analyzer isn't picking up
+          // Polymer.Element#rootPath
+          // rootPath: String,
+        };
+      }
+
+      static get observers() {
+        return [
+          '_routePageChanged(routeData.page)',
+        ];
+      }
+
+      _routePageChanged(page) {
+        // If no page was found in the route data, page will be an empty string.
+        // Default to 'view1' in that case.
+
+        this.page = page || 'about';
+        console.log('_routePageChange');
+
+
+        // Close a non-persistent drawer when the page & route are changed.
+        if (!this.$.drawer.persistent) {
+          this.$.drawer.close();
+        }
+      }
+
+      _pageChanged(page) {
+        // Load page import on demand. Show 404 page if fails
+        var resolvedPageUrl = this.resolveUrl(page + '.html');
+        Polymer.importHref(
+            resolvedPageUrl,
+            null,
+            this._showPage404.bind(this),
+            true);
+      }
+
+      _showPage404() {
+        this.page = 'view404';
+      }
+
+      _onLayoutChange(wide) {
+        var drawer = this.$.drawer;
+
+        if (wide && drawer.opened){
+          drawer.opened = false;
+        }
+      }
+
+    }
+    window.customElements.define(MyApp.is, MyApp);
+  </script>
+</dom-module>
